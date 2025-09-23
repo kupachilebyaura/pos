@@ -1,0 +1,41 @@
+<div>
+  <h2>Historial de Auditoría de Acciones</h2>
+  <form (ngSubmit)="buscar()" style="margin-bottom:16px;">
+    <label>Desde:</label>
+    <input type="date" [(ngModel)]="from" name="from">
+    <label>Hasta:</label>
+    <input type="date" [(ngModel)]="to" name="to">
+    <label>Usuario:</label>
+    <input type="number" [(ngModel)]="userId" name="userId" min="1">
+    <label>Acción:</label>
+    <input type="text" [(ngModel)]="action" name="action" placeholder="login, create-product...">
+    <button type="submit">Buscar</button>
+  </form>
+  <div *ngIf="loading">Cargando...</div>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <table *ngIf="logs.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha/Hora</th>
+        <th>Usuario</th>
+        <th>Acción</th>
+        <th>Detalles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let l of logs">
+        <td>{{l.id}}</td>
+        <td>{{l.timestamp | date:'short'}}</td>
+        <td>{{l.userName}}</td>
+        <td>{{l.action}}</td>
+        <td>{{l.details}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="total > pageSize" style="margin-top:16px;">
+    <button (click)="setPage(page-1)" [disabled]="page===1">Anterior</button>
+    Página {{page}} de {{(total/pageSize) | ceil}}
+    <button (click)="setPage(page+1)" [disabled]="page>=total/pageSize">Siguiente</button>
+  </div>
+</div>

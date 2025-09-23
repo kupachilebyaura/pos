@@ -1,0 +1,6 @@
+<div>
+  <input type="file" (change)="onFileSelected($event)">
+  <button (click)="upload()" [disabled]="!selectedFile">Subir Imagen</button>
+  <div *ngIf="uploadProgress > 0">Progreso: {{uploadProgress}}%</div>
+  <img *ngIf="imageUrl" [src]="imageUrl" alt="Imagen subida" width="120">
+</div>

@@ -1,0 +1,64 @@
+<div>
+  <h2>Punto de Venta</h2>
+  <input type="text" [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" placeholder="Buscar producto">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Agregar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{p.name}}</td>
+        <td>{{p.price}}</td>
+        <td>{{p.stock}}</td>
+        <td>
+          <button (click)="addToCart(p)" [disabled]="p.stock < 1">Agregar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label>Cliente:</label>
+  <select [(ngModel)]="selectedCustomerId">
+    <option [ngValue]="null">Sin cliente</option>
+    <option *ngFor="let c of customers" [ngValue]="c.id">{{c.name}}</option>
+  </select>
+  <label>Método de pago:</label>
+  <select [(ngModel)]="paymentMethod">
+    <option value="">Selecciona</option>
+    <option *ngFor="let m of paymentMethods" [value]="m">{{m}}</option>
+  </select>
+
+  <h3>Carrito de compras</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+        <th>Quitar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of cart">
+        <td>{{c.product.name}}</td>
+        <td>
+          <input type="number" [value]="c.quantity" min="1" [max]="c.product.stock"
+                 (input)="updateQuantity(c.product.id, $any($event.target).value)">
+        </td>
+        <td>{{c.product.price * c.quantity | number:'1.2-2'}}</td>
+        <td>
+          <button (click)="removeFromCart(c.product.id)">Quitar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div><b>Total: {{total | number:'1.2-2'}}</b></div>
+  <button (click)="finalizeSale()" [disabled]="!cart.length">Finalizar Venta</button>
+  <div *ngIf="successMsg" style="color:green">{{successMsg}}</div>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+</div>

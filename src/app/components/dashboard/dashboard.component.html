@@ -1,0 +1,29 @@
+<div>
+  <h2>Dashboard</h2>
+  <div *ngIf="loading">Cargando...</div>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <div *ngIf="!loading && !errorMsg && chartReady">
+    <h3>Top 5 Productos Más Vendidos (este mes)</h3>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis">
+    </apx-chart>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad Vendida</th>
+          <th>Ingresos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prod of topProducts">
+          <td>{{prod.productName}}</td>
+          <td>{{prod.totalSold}}</td>
+          <td>{{prod.totalIncome | currency:'USD':true}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

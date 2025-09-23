@@ -1,0 +1,45 @@
+<div>
+  <h2>Consolidado de Arqueos de Caja</h2>
+  <form (ngSubmit)="buscar()" style="margin-bottom:16px;">
+    <label>Desde:</label>
+    <input type="date" [(ngModel)]="from" name="from" required>
+    <label>Hasta:</label>
+    <input type="date" [(ngModel)]="to" name="to" required>
+    <label>Agrupar por:</label>
+    <select [(ngModel)]="groupBy" name="groupBy">
+      <option value="day">Día</option>
+      <option value="user">Usuario</option>
+    </select>
+    <button type="submit">Buscar</button>
+    <button type="button" (click)="descargar('excel')" [disabled]="!data.length">Descargar Excel</button>
+    <button type="button" (click)="descargar('pdf')" [disabled]="!data.length">Descargar PDF</button>
+  </form>
+  <div *ngIf="loading">Cargando...</div>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <table *ngIf="data.length">
+    <thead>
+      <tr>
+        <th>{{groupBy === 'user' ? 'Usuario' : 'Fecha'}}</th>
+        <th>Cant. Arqueos</th>
+        <th>Efectivo Inicial</th>
+        <th>Ventas Efectivo</th>
+        <th>Ingresos</th>
+        <th>Retiros</th>
+        <th>Monto Final</th>
+        <th>Diferencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of data">
+        <td>{{d.group}}</td>
+        <td>{{d.cantidadArqueos}}</td>
+        <td>{{d.efectivoInicial | number:'1.2-2'}}</td>
+        <td>{{d.ventasEfectivo | number:'1.2-2'}}</td>
+        <td>{{d.ingresos | number:'1.2-2'}}</td>
+        <td>{{d.retiros | number:'1.2-2'}}</td>
+        <td>{{d.montoFinal | number:'1.2-2'}}</td>
+        <td [ngStyle]="{'color': (d.diferencia || 0) !== 0 ? 'red' : 'green'}">{{d.diferencia | number:'1.2-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,47 @@
+<div>
+  <h2>Gestión de Roles</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="name" placeholder="Nombre del rol" required>
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" style="color:red">
+      El nombre es obligatorio.
+    </div>
+    <div>
+      <label>Permisos:</label>
+      <div class="permissions-list">
+        <label *ngFor="let perm of allPermissions">
+          <input type="checkbox"
+                 [checked]="hasPermission(perm)"
+                 (change)="togglePermission(perm)">
+          {{perm}}
+        </label>
+      </div>
+    </div>
+    <button type="submit">{{isEditing ? 'Actualizar' : 'Crear'}} Rol</button>
+    <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
+  </form>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <div *ngIf="successMsg" style="color:green">{{successMsg}}</div>
+  <hr>
+  <table>
+    <thead>
+      <tr>
+        <th>Rol</th>
+        <th>Permisos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let role of roles">
+        <td>{{role.name}}</td>
+        <td>
+          <ul>
+            <li *ngFor="let perm of role.permissions">{{perm}}</li>
+          </ul>
+        </td>
+        <td>
+          <button (click)="edit(role)">Editar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

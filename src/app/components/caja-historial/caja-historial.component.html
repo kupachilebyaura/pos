@@ -1,0 +1,43 @@
+<div>
+  <h2>Historial de Arqueos de Caja</h2>
+  <form (ngSubmit)="buscar()" style="margin-bottom:16px;">
+    <label>Desde:</label>
+    <input type="date" [(ngModel)]="from" name="from">
+    <label>Hasta:</label>
+    <input type="date" [(ngModel)]="to" name="to">
+    <label>Usuario:</label>
+    <input type="number" [(ngModel)]="userId" name="userId" min="1">
+    <button type="submit">Buscar</button>
+  </form>
+  <div *ngIf="loading">Cargando...</div>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <table *ngIf="sessions.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha Apertura</th>
+        <th>Fecha Cierre</th>
+        <th>Usuario</th>
+        <th>Monto Inicial</th>
+        <th>Monto Final</th>
+        <th>Diferencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of sessions">
+        <td>{{s.id}}</td>
+        <td>{{s.openedAt | date:'short'}}</td>
+        <td>{{s.closedAt ? (s.closedAt | date:'short') : '-'}}</td>
+        <td>{{s.user}}</td>
+        <td>{{s.initialAmount | number:'1.2-2'}}</td>
+        <td>{{s.closingAmount | number:'1.2-2'}}</td>
+        <td [ngStyle]="{'color': (s.difference || 0) !== 0 ? 'red' : 'green'}">{{s.difference | number:'1.2-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="total > pageSize" style="margin-top:16px;">
+    <button (click)="setPage(page-1)" [disabled]="page===1">Anterior</button>
+    Página {{page}} de {{(total/pageSize) | ceil}}
+    <button (click)="setPage(page+1)" [disabled]="page>=total/pageSize">Siguiente</button>
+  </div>
+</div>

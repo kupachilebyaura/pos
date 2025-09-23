@@ -1,0 +1,58 @@
+<div>
+  <h2>Control de Caja</h2>
+  <div *ngIf="!session">
+    <h3>Apertura de Caja</h3>
+    <input type="number" [(ngModel)]="initialAmount" placeholder="Monto inicial" min="0">
+    <button (click)="abrirCaja()">Abrir Caja</button>
+    <div *ngIf="openMsg" style="color:green">{{openMsg}}</div>
+    <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  </div>
+  <div *ngIf="session">
+    <h3>Caja Abierta</h3>
+    <p>Fecha de apertura: {{session.openedAt | date:'short'}}</p>
+    <p>Monto inicial: ${{session.initialAmount}}</p>
+    <hr>
+    <h4>Registrar Movimiento</h4>
+    <select [(ngModel)]="movementType">
+      <option value="">Tipo</option>
+      <option value="Ingreso">Ingreso</option>
+      <option value="Retiro">Retiro</option>
+    </select>
+    <input type="number" [(ngModel)]="movementAmount" placeholder="Monto" min="0">
+    <input type="text" [(ngModel)]="movementDescription" placeholder="Descripción">
+    <button (click)="registrarMovimiento()">Registrar</button>
+    <div *ngIf="movimientoMsg" style="color:green">{{movimientoMsg}}</div>
+    <div *ngIf="movimientoErr" style="color:red">{{movimientoErr}}</div>
+    <hr>
+    <h4>Movimientos de Caja</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha/Hora</th>
+          <th>Tipo</th>
+          <th>Monto</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of session.movements">
+          <td>{{m.timestamp | date:'shortTime'}}</td>
+          <td>{{m.type}}</td>
+          <td>{{m.amount}}</td>
+          <td>{{m.description}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <h4>Cierre de Caja</h4>
+    <input type="number" [(ngModel)]="finalAmount" placeholder="Monto final contado">
+    <button (click)="cerrarCaja()">Cerrar Caja</button>
+    <div *ngIf="closeMsg" style="color:green">{{closeMsg}}</div>
+    <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  </div>
+  <div style="margin-top:16px;" *ngIf="arqueoDisponible || ultimoArqueoSessionId">
+    <h4>Descargar Reporte de Arqueo</h4>
+    <button (click)="descargarArqueo('excel')" [disabled]="!ultimoArqueoSessionId">Descargar Arqueo Excel</button>
+    <button (click)="descargarArqueo('pdf')" [disabled]="!ultimoArqueoSessionId">Descargar Arqueo PDF</button>
+  </div>
+</div>
