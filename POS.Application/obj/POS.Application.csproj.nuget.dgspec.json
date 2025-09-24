@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj": {}
+    "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj": {}
   },
   "projects": {
-    "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj": {
+    "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
+        "projectUniqueName": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
         "projectName": "POS.Application",
-        "projectPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
+        "projectPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
         "packagesPath": "/Users/joseluisperez/.nuget/packages/",
-        "outputPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/",
+        "outputPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/joseluisperez/.nuget/NuGet/NuGet.Config"
