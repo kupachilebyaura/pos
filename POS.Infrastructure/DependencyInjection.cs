@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Infrastructure.Services;
 
 namespace POS.Infrastructure
 {
@@ -12,8 +13,9 @@ namespace POS.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            // Aquí puedes registrar otros servicios de infraestructura, repositorios, etc.
-            // Ejemplo: services.AddScoped<IUserRepository, UserRepository>();
+            // Registrar servicios de infraestructura
+            services.AddScoped<AuditService>();
+            services.AddScoped<AuthService>();
 
             return services;
         }

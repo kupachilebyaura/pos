@@ -15,6 +15,10 @@ namespace POS.Infrastructure
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<Sale> Sales => Set<Sale>();
         public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
+        public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<CashSession> CashSessions => Set<CashSession>();
+        public DbSet<CashRegisterSession> CashRegisterSessions => Set<CashRegisterSession>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +39,21 @@ namespace POS.Infrastructure
                 .HasOne(sd => sd.Product)
                 .WithMany()
                 .HasForeignKey(sd => sd.ProductId);
+
+            modelBuilder.Entity<CashSession>()
+                .HasOne(cs => cs.User)
+                .WithMany()
+                .HasForeignKey(cs => cs.UserId);
+
+            modelBuilder.Entity<CashMovement>()
+                .HasOne(cm => cm.Session)
+                .WithMany(cs => cs.Movements)
+                .HasForeignKey(cm => cm.CashSessionId);
+
+            modelBuilder.Entity<CashMovement>()
+                .HasOne(cm => cm.User)
+                .WithMany()
+                .HasForeignKey(cm => cm.UserId);
         }
     }
 }

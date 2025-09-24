@@ -1,0 +1,60 @@
+<div>
+  <h2>Gestión de Productos</h2>
+
+  <input type="text" [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" placeholder="Buscar por nombre o código">
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="name" placeholder="Nombre" required>
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" style="color:red">
+      El nombre es obligatorio.
+    </div>
+    <input type="text" formControlName="description" placeholder="Descripción">
+    <input type="number" formControlName="price" placeholder="Precio" required>
+    <div *ngIf="form.get('price')?.touched && form.get('price')?.invalid" style="color:red">
+      El precio debe ser mayor que 0.
+    </div>
+    <input type="number" formControlName="stock" placeholder="Stock" required>
+    <input type="text" formControlName="code" placeholder="Código">
+    <input type="file" (change)="onImageSelected($event)">
+    <button type="submit">{{isEditing ? 'Actualizar' : 'Crear'}} Producto</button>
+    <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
+  </form>
+
+  <hr>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Código</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>
+          <img *ngIf="p.imageUrl" [src]="'http://localhost:5000/api/file/product-image/' + p.imageUrl" alt="Imagen" width="60">
+        </td>
+        <td>{{p.name}}</td>
+        <td>{{p.description}}</td>
+        <td>{{p.price}}</td>
+        <td>{{p.stock}}</td>
+        <td>{{p.code}}</td>
+        <td>
+          <button (click)="edit(p)">Editar</button>
+          <button (click)="delete(p.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <button (click)="onPageChange(page-1)" [disabled]="page <= 1">Anterior</button>
+    Página {{page}} de {{(total / pageSize) | ceil}}
+    <button (click)="onPageChange(page+1)" [disabled]="page * pageSize >= total">Siguiente</button>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KÜPA POS - Demo UI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>KÜPA POS — Demo Frontend</h1>
+  </header>
+  <main>
+    <section id="controls">
+      <label>Desde: <input type="date" id="from" value="2025-01-01"/></label>
+      <label>Hasta: <input type="date" id="to" value="2025-09-24"/></label>
+      <button id="load">Cargar consolidado</button>
+    </section>
+
+    <section id="result">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Cantidad</th>
+            <th>Efectivo Inicial</th>
+            <th>Ventas Ef.</th>
+            <th>Ingresos</th>
+            <th>Retiros</th>
+            <th>Final</th>
+            <th>Diferencia</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <pre id="debug" style="display:none"></pre>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

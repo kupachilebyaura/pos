@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using POS.Infrastructure;
+using POS.Domain.Entities;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -23,9 +24,10 @@ public class AuditLoggingMiddleware
             // If login was successful
             if (context.Response.StatusCode == 200 && context.User.Identity.IsAuthenticated)
             {
-                var userId = int.Parse(context.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-                var userName = context.User.Identity.Name!;
-                dbContext.AuditLogs.Add(new POS.Domain.Entities.AuditLog
+                var userIdStr = context.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0";
+                var userId = int.Parse(userIdStr);
+                var userName = context.User.Identity?.Name ?? "anonymous";
+                dbContext.AuditLogs.Add(new AuditLog
                 {
                     Timestamp = DateTime.UtcNow,
                     UserId = userId,

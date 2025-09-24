@@ -1,0 +1,12 @@
+<div>
+  <h2>Reportes de Ventas</h2>
+  <form (ngSubmit)="$event.preventDefault()">
+    <label>Desde:</label>
+    <input type="date" [(ngModel)]="fromDate" name="fromDate" required>
+    <label>Hasta:</label>
+    <input type="date" [(ngModel)]="toDate" name="toDate" required>
+    <button type="button" (click)="downloadExcel()" [disabled]="loading">Descargar Excel</button>
+    <button type="button" (click)="downloadPdf()" [disabled]="loading">Descargar PDF</button>
+  </form>
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+</div>

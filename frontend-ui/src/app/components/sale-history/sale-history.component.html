@@ -1,0 +1,34 @@
+<div>
+  <h2>Historial de Ventas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Cliente</th>
+        <th>Método de pago</th>
+        <th>Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of sales">
+        <td>{{s.date | date:'short'}}</td>
+        <td>{{s.total | number:'1.2-2'}}</td>
+        <td>{{s.customerName || '---'}}</td>
+        <td>{{s.paymentMethod}}</td>
+        <td>
+          <ul>
+            <li *ngFor="let d of s.details">
+              {{d.productName}} (x{{d.quantity}}) - ${{d.price}}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <button (click)="onPageChange(page-1)" [disabled]="page <= 1">Anterior</button>
+    Página {{page}} de {{(total / pageSize) | ceil}}
+    <button (click)="onPageChange(page+1)" [disabled]="page * pageSize >= total">Siguiente</button>
+  </div>
+</div>

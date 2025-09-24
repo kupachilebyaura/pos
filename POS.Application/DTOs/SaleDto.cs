@@ -9,6 +9,7 @@ namespace POS.Application.DTOs
         public DateTime Date { get; set; }
         public decimal Total { get; set; }
         public string PaymentMethod { get; set; } = null!;
+        public int CustomerId { get; set; }
         public string? CustomerName { get; set; }
         public List<SaleDetailDto> Details { get; set; } = new();
     }

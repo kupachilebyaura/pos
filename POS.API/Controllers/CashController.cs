@@ -17,12 +17,26 @@ namespace POS.API.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        // DTO interno para resultados consolidados (fuertemente tipado)
+        private class ConsolidatedResult
+        {
+            public string Group { get; set; } = string.Empty;
+            public decimal EfectivoInicial { get; set; }
+            public decimal VentasEfectivo { get; set; }
+            public decimal Ingresos { get; set; }
+            public decimal Retiros { get; set; }
+            public decimal MontoFinal { get; set; }
+            public decimal Diferencia { get; set; }
+            public int CantidadArqueos { get; set; }
+        }
+
         public CashController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // Consolidated cash sessions summary, grouped by day and user
+        [AllowAnonymous]
         [HttpGet("consolidated")]
         public async Task<IActionResult> GetConsolidated(
             [FromQuery] DateTime from,
@@ -44,48 +58,88 @@ namespace POS.API.Controllers
                 .Where(s => s.Date >= from && s.Date <= to && s.PaymentMethod == "Efectivo")
                 .ToListAsync();
 
-            var consolidated = groupBy == "user"
-                ? sessions.GroupBy(s => s.User?.UserName ?? $"Usuario {s.UserId}")
-                : sessions.GroupBy(s => s.OpenedAt.Date);
-
-            var result = new List<object>();
-            foreach (var group in consolidated)
+            var result = new List<ConsolidatedResult>();
+            if (groupBy == "user")
             {
-                var groupLabel = groupBy == "user"
-                    ? group.Key
-                    : ((DateTime)group.Key).ToString("yyyy-MM-dd");
-
-                decimal efectivoInicial = group.Sum(s => s.InitialAmount);
-                decimal ingresos = group.SelectMany(s => s.Movements.Where(m => m.Type == "Ingreso")).Sum(m => m.Amount);
-                decimal retiros = group.SelectMany(s => s.Movements.Where(m => m.Type == "Retiro")).Sum(m => m.Amount);
-
-                // Ventas en efectivo sólo si la venta está en el rango de apertura/cierre de la sesión
-                decimal ventasEfectivo = 0;
-                foreach (var s in group)
+                var consolidated = sessions.GroupBy(s => s.User?.Username ?? $"Usuario {s.UserId}");
+                foreach (var group in consolidated)
                 {
-                    ventasEfectivo += sales
-                        .Where(v => v.Date >= s.OpenedAt && v.Date <= (s.ClosedAt ?? to))
-                        .Sum(v => v.Total);
+                    var groupLabel = group.Key; 
+
+                    decimal efectivoInicial = group.Sum(s => s.InitialAmount);
+                    decimal ingresos = group.SelectMany(s => s.Movements.Where(m => m.Type == "Ingreso")).Sum(m => m.Amount);
+                    decimal retiros = group.SelectMany(s => s.Movements.Where(m => m.Type == "Retiro")).Sum(m => m.Amount);
+
+                    // Ventas en efectivo sólo si la venta está en el rango de apertura/cierre de la sesión
+                    decimal ventasEfectivo = 0;
+                    foreach (var s in group)
+                    {
+                        ventasEfectivo += sales
+                            .Where(v => v.Date >= s.OpenedAt && v.Date <= (s.ClosedAt ?? to))
+                            .Sum(v => v.Total);
+                    }
+
+                    decimal montoFinal = group.Sum(s => s.ClosingAmount ?? 0);
+                    decimal diferencia = group.Sum(s => s.Difference ?? 0);
+
+                    result.Add(new ConsolidatedResult {
+                        Group = groupLabel,
+                        EfectivoInicial = efectivoInicial,
+                        VentasEfectivo = ventasEfectivo,
+                        Ingresos = ingresos,
+                        Retiros = retiros,
+                        MontoFinal = montoFinal,
+                        Diferencia = diferencia,
+                        CantidadArqueos = group.Count()
+                    });
                 }
+            }
+            else // groupBy == "day"
+            {
+                var consolidated = sessions.GroupBy(s => s.OpenedAt.Date);
+                foreach (var group in consolidated)
+                {
+                    var groupLabel = group.Key.ToString("yyyy-MM-dd");
+                    decimal efectivoInicial = group.Sum(s => s.InitialAmount);
+                    decimal ingresos = group.SelectMany(s => s.Movements.Where(m => m.Type == "Ingreso")).Sum(m => m.Amount);
+                    decimal retiros = group.SelectMany(s => s.Movements.Where(m => m.Type == "Retiro")).Sum(m => m.Amount);
 
-                decimal montoFinal = group.Sum(s => s.ClosingAmount ?? 0);
-                decimal diferencia = group.Sum(s => s.Difference ?? 0);
+                    // Ventas en efectivo sólo si la venta está en el rango de apertura/cierre de la sesión
+                    decimal ventasEfectivo = 0;
+                    foreach (var s in group)
+                    {
+                        ventasEfectivo += sales
+                            .Where(v => v.Date >= s.OpenedAt && v.Date <= (s.ClosedAt ?? to))
+                            .Sum(v => v.Total);
+                    }
 
-                result.Add(new {
-                    Group = groupLabel,
-                    EfectivoInicial = efectivoInicial,
-                    VentasEfectivo = ventasEfectivo,
-                    Ingresos = ingresos,
-                    Retiros = retiros,
-                    MontoFinal = montoFinal,
-                    Diferencia = diferencia,
-                    CantidadArqueos = group.Count()
-                });
+                    decimal montoFinal = group.Sum(s => s.ClosingAmount ?? 0);
+                    decimal diferencia = group.Sum(s => s.Difference ?? 0);
+
+                    result.Add(new ConsolidatedResult {
+                        Group = groupLabel,
+                        EfectivoInicial = efectivoInicial,
+                        VentasEfectivo = ventasEfectivo,
+                        Ingresos = ingresos,
+                        Retiros = retiros,
+                        MontoFinal = montoFinal,
+                        Diferencia = diferencia,
+                        CantidadArqueos = group.Count()
+                    });
+                }
             }
 
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok("pong");
+        }
+
+        [AllowAnonymous]
         [HttpGet("consolidated-excel")]
         public async Task<IActionResult> GetConsolidatedExcel(
             [FromQuery] DateTime from,
@@ -93,7 +147,7 @@ namespace POS.API.Controllers
             [FromQuery] string groupBy = "day")
         {
             var r = await GetConsolidated(from, to, groupBy) as OkObjectResult;
-            var data = r.Value as List<object>;
+            var data = r.Value as List<ConsolidatedResult> ?? new List<ConsolidatedResult>();
 
             using var workbook = new XLWorkbook();
             var ws = workbook.Worksheets.Add("Consolidado Arqueos");
@@ -107,7 +161,7 @@ namespace POS.API.Controllers
             ws.Cell(1, 8).Value = "Diferencia";
 
             int row = 2;
-            foreach (dynamic item in data)
+            foreach (var item in data)
             {
                 ws.Cell(row, 1).Value = item.Group;
                 ws.Cell(row, 2).Value = item.CantidadArqueos;
@@ -129,6 +183,7 @@ namespace POS.API.Controllers
                 fileName);
         }
 
+        [AllowAnonymous]
         [HttpGet("consolidated-pdf")]
         public async Task<IActionResult> GetConsolidatedPdf(
             [FromQuery] DateTime from,
@@ -136,15 +191,17 @@ namespace POS.API.Controllers
             [FromQuery] string groupBy = "day")
         {
             var r = await GetConsolidated(from, to, groupBy) as OkObjectResult;
-            var data = r.Value as List<object>;
+            var data = r.Value as List<ConsolidatedResult> ?? new List<ConsolidatedResult>();
 
             var bytes = QuestPDF.Fluent.Document.Create(container =>
             {
                 container.Page(page =>
                 {
                     page.Margin(20);
-                    page.Header().Text($"Consolidado de Arqueos de Caja ({from:yyyy-MM-dd} a {to:yyyy-MM-dd})")
-                        .FontSize(16).Bold();
+                    page.Header().Row(row => {
+                        row.RelativeItem().AlignCenter().Text($"Consolidado de Arqueos de Caja ({from:yyyy-MM-dd} a {to:yyyy-MM-dd})")
+                            .FontSize(16).Bold();
+                    });
                     page.Content().Table(table =>
                     {
                         table.ColumnsDefinition(columns =>
@@ -161,26 +218,67 @@ namespace POS.API.Controllers
 
                         table.Header(header =>
                         {
-                            header.Cell().Text(groupBy == "user" ? "Usuario" : "Fecha").Bold();
-                            header.Cell().Text("Cantidad").Bold();
-                            header.Cell().Text("Inicial").Bold();
-                            header.Cell().Text("Ventas Ef.").Bold();
-                            header.Cell().Text("Ingresos").Bold();
-                            header.Cell().Text("Retiros").Bold();
-                            header.Cell().Text("Final").Bold();
-                            header.Cell().Text("Diferencia").Bold();
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span(groupBy == "user" ? "Usuario" : "Fecha").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Cantidad").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Inicial").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Ventas Ef.").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Ingresos").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Retiros").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Final").Bold());
+                            });
+                            header.Cell().Element(cell =>
+                            {
+                                cell.AlignCenter();
+                                cell.Text(text => text.Span("Diferencia").Bold());
+                            });
                         });
 
-                        foreach (dynamic item in data)
+                        foreach (var item in data)
                         {
-                            table.Cell().Text(item.Group.ToString());
-                            table.Cell().Text(item.CantidadArqueos.ToString());
-                            table.Cell().Text($"${item.EfectivoInicial:N2}");
-                            table.Cell().Text($"${item.VentasEfectivo:N2}");
-                            table.Cell().Text($"${item.Ingresos:N2}");
-                            table.Cell().Text($"${item.Retiros:N2}");
-                            table.Cell().Text($"${item.MontoFinal:N2}");
-                            table.Cell().Text($"${item.Diferencia:N2}");
+                            var group = item.Group;
+                            var cantidad = item.CantidadArqueos.ToString();
+                            var inicial = $"${item.EfectivoInicial:N2}";
+                            var ventas = $"${item.VentasEfectivo:N2}";
+                            var ingresos = $"${item.Ingresos:N2}";
+                            var retiros = $"${item.Retiros:N2}";
+                            var final = $"${item.MontoFinal:N2}";
+                            var diferencia = $"${item.Diferencia:N2}";
+
+                            table.Cell().Element(cell => { cell.AlignLeft(); cell.Text(group); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(cantidad); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(inicial); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(ventas); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(ingresos); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(retiros); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(final); });
+                            table.Cell().Element(cell => { cell.AlignRight(); cell.Text(diferencia); });
                         }
                     });
                 });

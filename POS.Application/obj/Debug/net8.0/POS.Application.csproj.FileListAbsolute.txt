@@ -1,0 +1,13 @@
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.AssemblyInfoInputs.cache
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.AssemblyInfo.cs
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.csproj.CoreCompileInputs.cache
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.sourcelink.json
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/bin/Debug/net8.0/POS.Application.deps.json
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/bin/Debug/net8.0/POS.Application.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/bin/Debug/net8.0/POS.Application.pdb
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.csproj.AssemblyReference.cache
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/refint/POS.Application.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/POS.Application.pdb
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/obj/Debug/net8.0/ref/POS.Application.dll

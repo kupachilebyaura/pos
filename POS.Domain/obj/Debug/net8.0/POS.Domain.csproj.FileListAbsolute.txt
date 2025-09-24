@@ -1,0 +1,12 @@
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.AssemblyInfoInputs.cache
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.AssemblyInfo.cs
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.csproj.CoreCompileInputs.cache
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.sourcelink.json
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/bin/Debug/net8.0/POS.Domain.deps.json
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/bin/Debug/net8.0/POS.Domain.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/bin/Debug/net8.0/POS.Domain.pdb
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/refint/POS.Domain.dll
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/POS.Domain.pdb
+/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Domain/obj/Debug/net8.0/ref/POS.Domain.dll

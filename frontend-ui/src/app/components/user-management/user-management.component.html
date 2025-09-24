@@ -1,0 +1,53 @@
+<div>
+  <h2>Gestión de Usuarios</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="username" placeholder="Usuario" required>
+    <div *ngIf="form.get('username')?.touched && form.get('username')?.invalid" style="color:red">
+      El usuario es obligatorio.
+    </div>
+    <input type="password" formControlName="password" placeholder="Contraseña" [required]="!isEditing">
+    <div *ngIf="!isEditing && form.get('password')?.touched && form.get('password')?.invalid" style="color:red">
+      La contraseña es obligatoria.
+    </div>
+    <select formControlName="role" required>
+      <option value="">Rol</option>
+      <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+    </select>
+    <div *ngIf="form.get('role')?.touched && form.get('role')?.invalid" style="color:red">
+      El rol es obligatorio.
+    </div>
+    <input type="text" formControlName="fullName" placeholder="Nombre completo">
+    <input type="email" formControlName="email" placeholder="Email">
+    <button type="submit">{{isEditing ? 'Actualizar' : 'Crear'}} Usuario</button>
+    <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
+  </form>
+
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <div *ngIf="successMsg" style="color:green">{{successMsg}}</div>
+
+  <hr>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Rol</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of users">
+        <td>{{u.username}}</td>
+        <td>{{u.role}}</td>
+        <td>{{u.fullName}}</td>
+        <td>{{u.email}}</td>
+        <td>
+          <button (click)="edit(u)">Editar</button>
+          <button (click)="delete(u.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

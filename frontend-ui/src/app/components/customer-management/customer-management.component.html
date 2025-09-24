@@ -1,0 +1,55 @@
+<div>
+  <h2>Gestión de Clientes</h2>
+
+  <input type="text" [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" placeholder="Buscar cliente">
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="name" placeholder="Nombre" required>
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" style="color:red">
+      El nombre es obligatorio.
+    </div>
+    <input type="email" formControlName="email" placeholder="Email">
+    <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" style="color:red">
+      Email no válido.
+    </div>
+    <input type="text" formControlName="phone" placeholder="Teléfono">
+    <div *ngIf="form.get('phone')?.touched && form.get('phone')?.invalid" style="color:red">
+      El teléfono solo puede contener números, espacios, + y -.
+    </div>
+    <button type="submit">{{isEditing ? 'Actualizar' : 'Crear'}} Cliente</button>
+    <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancelar</button>
+  </form>
+
+  <div *ngIf="errorMsg" style="color:red">{{errorMsg}}</div>
+  <div *ngIf="successMsg" style="color:green">{{successMsg}}</div>
+
+  <hr>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers">
+        <td>{{c.name}}</td>
+        <td>{{c.email}}</td>
+        <td>{{c.phone}}</td>
+        <td>
+          <button (click)="edit(c)">Editar</button>
+          <button (click)="delete(c.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <button (click)="onPageChange(page-1)" [disabled]="page <= 1">Anterior</button>
+    Página {{page}} de {{(total / pageSize) | ceil}}
+    <button (click)="onPageChange(page+1)" [disabled]="page * pageSize >= total">Siguiente</button>
+  </div>
+</div>
