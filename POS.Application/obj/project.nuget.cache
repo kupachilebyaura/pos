@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WtGqGSb/XaI=",
+  "dgSpecHash": "3DobfB35rn8=",
   "success": true,
-  "projectFilePath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
+  "projectFilePath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
   "expectedPackageFiles": [
     "/Users/joseluisperez/.nuget/packages/cloudinarydotnet/1.20.0/cloudinarydotnet.1.20.0.nupkg.sha512",
     "/Users/joseluisperez/.nuget/packages/microsoft.aspnetcore.html.abstractions/2.2.0/microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
@@ -19,9 +19,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "POS.Application depende de CloudinaryDotNet (>= 1.19.2), pero no se encontró CloudinaryDotNet 1.19.2. CloudinaryDotNet 1.20.0 se resolvió en su lugar.",
-      "projectPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
+      "projectPath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
       "warningLevel": 1,
-      "filePath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
+      "filePath": "/Users/joseluisperez/Documents/Personal/Desarrollos/KÜPA Logistic/POS/POS.Application/POS.Application.csproj",
       "libraryId": "CloudinaryDotNet",
       "targetGraphs": [
         "net8.0"
